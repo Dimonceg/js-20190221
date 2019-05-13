@@ -12,7 +12,10 @@ export default class PhonesPage extends Component {
     this.state = {
       phones: getAll(),
       selectedPhone: null,
-      basketItems: []
+      basketItems: {
+        'phone1': 1,
+        'phone2': 2,
+      }
     }
     
     this.render()
@@ -22,6 +25,13 @@ export default class PhonesPage extends Component {
     this.initComponent(Filter)
     this.initComponent(ShoppingCart, {
       basketItems: this.state.basketItems,
+      onRemove: (itemToRemove) => {
+        const newBasketItems = this.state.basketItems
+        delete newBasketItems[itemToRemove]
+        this.setState({
+          basketItems: newBasketItems
+        })
+      }
     })
     this.initComponent(PhonesCatalog, {
       phones: this.state.phones,
@@ -31,8 +41,12 @@ export default class PhonesPage extends Component {
         })
       },
       addPhone: (phoneId) => {
+        const oldBasketItems = this.state.basketItems
         this.setState({
-          basketItems: [...this.state.basketItems, phoneId],
+          basketItems: {
+            ...this.state.basketItems,
+            [phoneId]: oldBasketItems[phoneId] ? oldBasketItems[phoneId] +1 : 1
+          }
         })
       }
     })
@@ -44,8 +58,12 @@ export default class PhonesPage extends Component {
         })
       },
       addPhone: (phoneId) => {
+        const oldBasketItems = this.state.basketItems
         this.setState({
-          basketItems: [...this.state.basketItems, phoneId],
+          basketItems: {
+            ...this.state.basketItems,
+            [phoneId]: oldBasketItems[phoneId] ? oldBasketItems[phoneId] + 1 : 1
+          },
         })
       }
     })

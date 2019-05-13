@@ -4,15 +4,21 @@ export default class PhoneViewer extends Component {
     constructor(element, props) {
         super(element, props)
 
-        this.render()
+        this.state = {
+            selectedImage: this.props.phone.images[0],
+        }
         
+        this.render()
+
         this.on('click', '[data-back]', () => {
             this.props.backToCatalog()  
         })
 
         this.on('click', '[data-images]', (event) => {
-            const phone = document.querySelector('.phone')
-            phone.src = event.delegeteTarget.src
+            const imageSrc = event.delegeteTarget.dataset.imageUrl
+            this.setState({
+                selectedImage: imageSrc,
+            })
         })
 
         this.on('click', '[data-add]', () => {
@@ -24,11 +30,10 @@ export default class PhoneViewer extends Component {
         const { phone } = this.props;
         this.element.innerHTML = `
             <div>
-                <img class="phone" src="${phone.images[0]}">
+                <img class="phone" src="${ this.state.selectedImage }">
 
                 <button data-back>Back</button>
                 <button data-add>Add to basket</button>
-            
             
                 <h1>${phone.name}</h1>
             
@@ -36,7 +41,7 @@ export default class PhoneViewer extends Component {
             
                 <ul class="phone-thumbs">
                 ${phone.images.map(function(img){
-                    return `<li><img src="${img}" data-images></li>`
+                    return `<li><img src="${img}" data-images data-image-url="${img}"></li>`
                 }).join('')}
                 </ul>
             </div>

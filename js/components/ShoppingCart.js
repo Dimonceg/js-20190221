@@ -5,6 +5,11 @@ export default class ShoppingCart extends Component {
     super(element, props)
 
     this.render()
+
+    this.on('click', '[data-remove]', (event) => {
+      const item = event.delegeteTarget.dataset.item
+      this.props.onRemove(item)
+    })
   }
   render() {
     const { basketItems } = this.props;
@@ -12,10 +17,10 @@ export default class ShoppingCart extends Component {
       <div>
         <p>Shopping Cart</p>
         <ul>
-          ${basketItems.map(item => `
+          ${Object.keys(basketItems).map(item => `
             <li>
-              ${item}
-              <button>X</button>
+              ${item} - ${basketItems[item]}
+              <button data-remove data-item="${item}">X</button>
             </li>
           `).join('')}
         </ul>
